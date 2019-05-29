@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+       <insert id="insert" parameterType="boardvo">
+             
+             <choose>
+                    <!-- 만약에 처음 글이면  Max(groupNo)+1 -->
+                     <when test="groupNo == 0">
+                    <![CDATA[
+                          insert into board values(null,#{title},#{contents},
+                          #{hit},date_format(now(),'%Y-%m-%d %h:%i:%s'),
+                          (select IFNULL(MAX(group_no),0)+1 from board b),#{orderNo},#{depth},#{userNo})
+                    ]]>
+                    </when>
+                    
+                    <otherwise>
+                         <![CDATA[
+                             insert into board values(null,#{title},#{contents},
+                             #{hit},date_format(now(),'%Y-%m-%d %h:%i:%s'),
+                             #{groupNo},#{orderNo},#{depth},#{userNo})
+                         ]]>
+                    </otherwise>
+             </choose>
+       </insert>
+       
+       <insert id="insertReply" parameterType="boardvo">
+             <![CDATA[
+                    insert into board values(null,#{title},#{contents},#{hit},date_format(now(),'%Y-%m-%d %h:%i:%s'),
+                          (select a.group_no from board as a where a.no = #{no}),
+                          (select a.order_no + 1 from board as a where a.no = #{no}),
+                          (select a.depth + 1 from board as a where a.no = #{no}), #{userNo})
+             ]]>
+       
+       </insert>
+       
+     <select id="getList" resultType="boardvo" parameterType="map">
+             
+              <![CDATA[
+                    SELECT b.no, b.title, b.contents, b.hit, b.reg_date as regDate ,b.user_no as userNo,b.group_no as groupNo ,u.name as userName,b.depth
+                     FROM user u, board b
+                     WHERE u.no = b.user_no
+              ]]>
+              
+           <if test="keyword != null or keyword = ''">
+                 <![CDATA[
+                      AND title like CONCAT('%', #{keyword}, '%') OR contents like CONCAT('%', #{keyword}, '%')
+                  and u.no = b.user_no
+                   ]]>
+           </if> 
+           
+              <![CDATA[
+                    ORDER BY group_no DESC, order_no ASC 
+                    LIMIT #{pageStart},#{boardCnt}
+              ]]>
+              
+       </select>
+
+       
+       
+       <select id="getByBoardNo" resultType="boardvo" parameterType="long">
+             <![CDATA[
+                    SELECT b.no, b.title, b.contents, b.hit, b.reg_date as regDate ,b.user_no as userNo,b.group_no as groupNo ,u.name as userName
+                     FROM user u, board b
+                     WHERE u.no = b.user_no and b.no = #{value}
+                    ORDER BY group_no DESC, order_no ASC
+             ]]>
+       </select>
+       
+       <select id="getList2" resultType="boardvo" parameterType="long">
+             <![CDATA[
+                    SELECT no, name, contents, date_format(reg_date,'%Y-%m-%d %h:%i:%s')
+                     FROM guestbook
+                    ORDER BY reg_date desc
+                    
+             ]]>
+             <if test="_parameter > 0">
+                    <![CDATA[
+                          where no < #{_parameter}
+                    ]]>
+             </if>
+       </select>
+       
+       <update id="update" parameterType="boardvo">
+             <![CDATA[
+                    UPDATE board SET title=#{title}, contents=#{contents} WHERE no = #{no}
+             ]]>
+       </update>
+       
+       <update id="updateOrderNo" parameterType="boardvo">
+             <![CDATA[
+                    update board set order_no = order_no + 1
+                          where group_no = (select * from (select group_no from board where no = #{no}) b1)
+                                 and order_no > (select * from (select order_no from board where no = #{no}) b2)
+             ]]>
+       </update>
+       
+       <update id="hitupdate" parameterType="long">
+             <![CDATA[
+                    UPDATE board SET hit=hit+1 WHERE no = #{value}
+             ]]>
+       </update>
+       
+       
+       <delete id="delete" parameterType="long">
+             <![CDATA[
+                    DELETE FROM board WHERE no = #{value}
+             ]]>
+       </delete>
+       
+       
+       <select id="count" parameterType="string" resultType="Integer">
+             select count(*) from board 
+                  where title like CONCAT('%', #{keyword}, '%') OR contents like CONCAT('%', #{keyword}, '%')
+       </select>
+       
+</mapper>

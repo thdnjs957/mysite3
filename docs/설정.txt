@@ -1,0 +1,43 @@
+1. Maven Project 생성
+2. Pom 설정
+3. web.xml 설정
+	controller <- Service <- Repository <- SQLSession
+
+4. AppConfig 설정 (import 통해서)
+	   |--------DBConfig: DataSource 
+	   				|------- jdbc.properties 
+	   |--------MyBatisConfig: sqlSession, sqlSessionFactory
+	   
+5. WebConfig 설정 많다...
+		|-----MVCConfig
+		|-----SecurityConfig
+		|-----MessageConfig
+		|-----FileUploadConfig
+		
+6. GlobalExceptionHandler
+
+7. SF4J. Logback
+
+원래는 mybatis는 classes (mysite2) 참고 밑에 바로 있었드 classpath 대로 옮겨줌
+
+/mysite 실제 경로는
+WEB-INF
+	|--- /classes [src/main/java 밑에 애들 컴파일되서 들어옴 , src/main/resource, src/main/test/java,src/main/test/resources]
+			|------/com
+					 |-----/cafe24
+					 			|-----/mysite
+					 			|		 |------/config
+					 			|		 			|-----AppConfig
+					 			|		 			|-----WebConfig
+					 			|-----/config  //밖에 뺀이유: 다른 application에 적용할 수 있어서 mysite말고도
+					 					 |------/app //비즈니스
+					 					 		  |------ DBConfig
+					 					 		  |------ MyBatisConfig
+					 					 		  |------ /myBatis
+					 					 		  			|-------configuration.xml
+					 					 		  			|-------/mappers
+					 					 		  						|------user.xml
+					 					 		  						|------...다른것도 추가
+					 					 |------/web
+					 			
+	   			
