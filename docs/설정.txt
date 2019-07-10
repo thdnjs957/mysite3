@@ -20,24 +20,38 @@
 
 원래는 mybatis는 classes (mysite2) 참고 밑에 바로 있었드 classpath 대로 옮겨줌
 
-/mysite 실제 경로는
-WEB-INF
-	|--- /classes [src/main/java 밑에 애들 컴파일되서 들어옴 , src/main/resource, src/main/test/java,src/main/test/resources]
-			|------/com
-					 |-----/cafe24
-					 			|-----/mysite
-					 			|		 |------/config
-					 			|		 			|-----AppConfig
-					 			|		 			|-----WebConfig
-					 			|-----/config  //밖에 뺀이유: 다른 application에 적용할 수 있어서 mysite말고도
-					 					 |------/app //비즈니스
-					 					 		  |------ DBConfig
-					 					 		  |------ MyBatisConfig
-					 					 		  |------ /myBatis
-					 					 		  			|-------configuration.xml
-					 					 		  			|-------/mappers
-					 					 		  						|------user.xml
-					 					 		  						|------...다른것도 추가
-					 					 |------/web
-					 			
+/mysite 실제 경로는		 						  
+ /WEB-INF
+	|--- /classes [src/main/java 밑에 애들 컴파일되서 들어옴 , src/main/test/java, src/main/resource,src/main/test/resources]
+			|--- /com
+					|--- /cafe24
+							|--- /mysite
+							|		|--- /config
+							|				|--- AppConfig
+							|				|--- WebConfig
+							|
+							|--- /config
+									|--- /app (applicationContext xml)
+									|		|--- DBConfig
+									|		|--- MyBatisConfig
+									|		|--- /mybatis
+									|		|		|--- configuration.xml
+									|		|		|--- /mappers
+									|		|		|		|--- user.xml
+									|		|		|		|--- ....
+									|		|--- /properties
+									|		|		|----- jdbc.propeties
+									|--- /web (spring-servlet xml)
+									|		|--- MVCConfig
+									|		|--- SecurityConfig
+									|		|--- MessageConfig
+									|		|--- FileUploadConfig
+									|		|--- /messages
+									|		|		|---- messages_ko.properties
+									|		|--- /properties
+									|		|		|---- multipart.properties 		         
+									
+							
+					 					
+					 							  
 	   			

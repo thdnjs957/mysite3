@@ -17,6 +17,7 @@
 		<param-name>contextClass</param-name>
 		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
 	</context-param>
+	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>com.cafe24.mysite.config.AppConfig</param-value>
@@ -73,6 +74,5 @@
 		<error-code>500</error-code>
 		<location>/WEB-INF/views/error/500.jsp</location>
 	</error-page>
-	
 	
 </web-app>

@@ -33,7 +33,7 @@
       com.cafe24.logex2 아래 패키지 로그들만  \logex\logex2.log 파일에만  출력하는 로거
       level이 debug 면 모든 종류의 로그 다나옴
    -->
-   <logger name="com.cafe24.mysite.exception"  level="error" additivity="false">
+   <logger name="com.cafe24.mysite.exception"  level="debug" additivity="false">
             <appender-ref ref="consoleAppender" />
             <appender-ref ref="fileAppender" />
     </logger>

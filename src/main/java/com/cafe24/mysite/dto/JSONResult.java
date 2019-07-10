@@ -6,7 +6,7 @@ public class JSONResult {
 	private String message; //if fail , set
 	private Object data;   // if success, set
 	
-	public static JSONResult success(Object data) {
+	public static JSONResult success(Object data) { //data = exist
 		return new JSONResult("success",null,data);
 	}
 	
