@@ -12,14 +12,29 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.cafe24.mysite.security.AuthUserHandlerMethodArgumentResolver;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 @Configuration
 public class MVCConfig extends WebMvcConfigurerAdapter {
+	
+	//
+	// Argument Resolver
+	//
+	@Bean
+	public AuthUserHandlerMethodArgumentResolver authUserHandlerMethodArgumentResolver() {
+		return new AuthUserHandlerMethodArgumentResolver();
+	}
+	
+	@Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+		argumentResolvers.add(authUserHandlerMethodArgumentResolver());
+	}
 	
 	//
 	// View Resolver

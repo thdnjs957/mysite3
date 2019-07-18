@@ -15,23 +15,28 @@ public class GuestbookService {
 	@Autowired
 	private GuestbookDao guestbookdao;
 
-	public void getList(Model model) {
-
+	public List<GuestbookVo> getContentList() {
+		
 		List<GuestbookVo> list = guestbookdao.getList();
-		model.addAttribute("list",list);
-		
+		return list;
 	}
 
-	public boolean insert(GuestbookVo guestbookVo) {
-		
-		return guestbookdao.insert(guestbookVo);
-		
-	}
+	public List<GuestbookVo> getContentList(Long lastNo) {
 
+		List<GuestbookVo> list = guestbookdao.getList(lastNo);
+		return list;
+	}
+	
+	public boolean writeContent(GuestbookVo vo) {
+		
+		return guestbookdao.insert(vo);
+	}
+	
+	
 	public boolean delete(GuestbookVo guestbookVo) {
 		
 		return guestbookdao.delete(guestbookVo);
-	
 	}
+
 	
 }

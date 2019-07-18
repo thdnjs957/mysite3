@@ -2,12 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="guestbook">
+
 	<insert id="insert" parameterType="guestbookvo">
 		<![CDATA[
 			insert into guestbook values(null,#{name},#{password},#{contents},now())
 		]]>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+		
 	</insert>
-	
 	
 	<select id="getList" resultType="guestbookvo" >
 		<![CDATA[
@@ -17,20 +21,23 @@
 		]]>
 	</select>
 	
+	
 	<select id="getList2" resultType="guestbookvo" parameterType="long"> 
 		<![CDATA[
 			select no, name, contents, date_format(reg_date,'%Y-%m-%d %h:%i:%s')
 			 from guestbook
-			order by reg_date desc
-		]]>
-		<if test="_parameter > 0">
+		]]>	
+		<if test="_parameter > 0"> <!-- 파라미터가 0이 아니면 -->
 			<![CDATA[
-				where no < #{_parameter}
-			]]>
-		</if>
+			where no < #{_parameter}
+		 	]]>	
+		</if>    
+		order by no desc
+		<![CDATA[
+		   limit 0, 5
+	 	]]>	
 	</select>
 
-	
 	<delete id="delete" parameterType="guestbookvo">
 		<![CDATA[
 			delete from guestbook where no = #{no} and password = #{password}

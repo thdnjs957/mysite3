@@ -2,14 +2,11 @@ package com.cafe24.mysite.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.cafe24.security.Auth;
 
 @Controller
 @RequestMapping("/admin")
-@Auth(role = Auth.Role.ADMIN)
 // Auth에 type(클래스) 추가해야함 , 인증을 받아야하는데 ADMIN 권한임 
 public class AdminController {
-	
 	
 	@RequestMapping({"","/main"})
 	public String main() {

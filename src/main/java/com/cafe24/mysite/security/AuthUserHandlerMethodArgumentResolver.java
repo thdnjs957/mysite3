@@ -1,16 +1,13 @@
-package com.cafe24.security;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+package com.cafe24.mysite.security;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.web.bind.support.WebArgumentResolver;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.cafe24.mysite.vo.UserVo;
 
 public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -18,19 +15,19 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		
-		if( supportsParameter(parameter) == false ) {
-			return WebArgumentResolver.UNRESOLVED;//빈 오브젝트 하나
+		Object principal = null;
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		if(authentication != null) {
+			principal = authentication.getPrincipal();
 		}
-				
-		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		
-		HttpSession session = request.getSession();
-		
-		if(session == null){
+		if(principal == null || principal.getClass() == String.class) {
 			return null;
 		}
 		
-		return session.getAttribute("authUser"); //리턴하면 @AuthUser UserVo authUser에 세팅이 됨
+		return principal;//리턴하면 @AuthUser UserVo authUser에 세팅이 됨
 	}
 
 	@Override
@@ -43,12 +40,13 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 			return false;
 		}
 
-		//파라미터(argument타입이 UserVo 가 아니면)
-		if(parameter.getParameterType().equals(UserVo.class) == false) {
+		//파라미터 타입이 SecurityUser가 아님
+		if(parameter.getParameterType().equals(SecurityUser.class) == false) {
 			return false;
 		}
 		
 		return true;
 	}
+	
 
 }

@@ -1,23 +1,35 @@
 package com.cafe24.mysite.vo;
 
+
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.cafe24.mysite.validator.constraints.ValidGender;
 
 public class UserVo {
 	
 	private Long no;
 	
 	@NotEmpty
-	@Length(min=2, max=8)
+	@Length(min=2, max=8, message="이름은 2글자 이상 8글자 이하여야 합니다.")
 	private String name;
 	
 	@Email
 	@NotEmpty
 	private String email;
+	
+	@Pattern(regexp="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}",message="최소 8자리에  대문자, 숫자, 문자, 특수문자 각각 1개 이상 포함")
+	@Length(min=8, max=20, message="비밀번호는 8자 이상 20자 이하로 입력해야 합니다.")
 	private String password;
+	
+	@ValidGender
 	private String gender;
-	private String role;
+	
+	private String role = "ROLE_USER";
+	
 	private String joinDate;
 	
 	public UserVo() {
@@ -69,7 +81,6 @@ public class UserVo {
 	public String getRole() {
 		return role;
 	}
-
 	public void setRole(String role) {
 		this.role = role;
 	}

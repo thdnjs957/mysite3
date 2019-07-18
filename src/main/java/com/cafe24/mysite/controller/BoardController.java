@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cafe24.mysite.security.AuthUser;
+import com.cafe24.mysite.security.SecurityUser;
 import com.cafe24.mysite.service.BoardService;
 import com.cafe24.mysite.vo.BoardVo;
 import com.cafe24.mysite.vo.UserVo;
-import com.cafe24.security.Auth;
 @Controller
 @RequestMapping("/board")
 public class BoardController {
@@ -39,22 +40,19 @@ public class BoardController {
        return "board/list";
    }
   
-   @Auth(role = Auth.Role.USER) //role 속성 생략 가능
    @RequestMapping(value = "/write",method=RequestMethod.GET)
-   public String write(Model model,@RequestParam(value="no", required=true, defaultValue="") Long no,HttpSession session) {
+   public String write(Model model,@AuthUser SecurityUser securityUser,@RequestParam(value="no", required=true, defaultValue="") Long no) {
 
       if(no != null) {
          model.addAttribute("no", no);
       }
-//      if(session.getAttribute("authUser") == null) {
-//         return "redirect:/user/login";
-//      }
 
       return "board/write";
    }
   
    @RequestMapping(value = "/write",method=RequestMethod.POST)
-   public String write(Model model,@ModelAttribute BoardVo boardVo,HttpSession session) {
+   public String write(Model model,@AuthUser SecurityUser securityUser,@ModelAttribute BoardVo boardVo) {
+	   
       if(boardVo.getNo() != null) { //답글이면
          boardService.insertReply(boardVo);
       }else { //새로쓴 글이면
@@ -75,13 +73,10 @@ public class BoardController {
        return "board/view";
    }
   
-   @Auth(role = Auth.Role.USER)
    @RequestMapping(value = "/modify",method=RequestMethod.GET)
-   public String modify(HttpSession session,Model model,@RequestParam(value = "boardNo") Long boardNo, @RequestParam(value = "userNo") Long userNo) {
+   public String modify(@AuthUser SecurityUser securityUser,Model model,@RequestParam(value = "boardNo") Long boardNo, @RequestParam(value = "userNo") Long userNo) {
      
-      UserVo authvo = (UserVo) session.getAttribute("authUser");
-     
-      if(authvo.getNo() != userNo || session.getAttribute("authUser") == null) {
+      if(securityUser.getNo() != userNo ) {
          return "redirect:/board/list";
       }
      
@@ -93,25 +88,23 @@ public class BoardController {
   
   
    @RequestMapping(value = "/modify",method=RequestMethod.POST)
-   public String modify(Model model,@ModelAttribute BoardVo boardVo,@RequestParam(value = "boardNo") Long no) {
+   public String modify(Model model,@AuthUser SecurityUser securityUser,@ModelAttribute BoardVo boardVo,@RequestParam(value = "boardNo") Long no) {
      
       boardVo.setNo(no);
-      boolean result = boardService.update(boardVo);
+      
+      boardService.update(boardVo);
      
       return "redirect:/board/list";
    }
   
-   @Auth
    @RequestMapping("/delete")
-   public String delete(Model model,@RequestParam(value = "boardNo") Long boardNo, @RequestParam(value = "userNo") Long userNo,HttpSession session) {
+   public String delete(Model model,@AuthUser SecurityUser securityUser,@RequestParam(value = "boardNo") Long boardNo, @RequestParam(value = "userNo") Long userNo) {
      
-      UserVo authvo = (UserVo) session.getAttribute("authUser");
-     
-      if(authvo.getNo() != userNo || session.getAttribute("authUser") == null) {
+      if(securityUser.getNo() != userNo) {
          return "redirect:/board/list";
       }
      
-      boolean result = boardService.delete(boardNo);
+      boardService.delete(boardNo);
      
       return "redirect:/board/list";
    }

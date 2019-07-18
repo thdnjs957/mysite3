@@ -1,7 +1,5 @@
 package com.cafe24.mysite.config;
 
-
-import com.cafe24.config.web.SecurityConfig;
 import com.cafe24.config.web.SwaggerConfig;
 
 import org.springframework.context.annotation.Bean;
@@ -19,8 +17,8 @@ import com.cafe24.config.web.MessageConfig;
 @Configuration
 @EnableWebMvc//mvc 붙어있는애들 한번에 
 @EnableAspectJAutoProxy
-@ComponentScan({"com.cafe24.mysite.controller"}) //이건 자동 설정
-@Import({MVCConfig.class, SecurityConfig.class,MessageConfig.class,SwaggerConfig.class}) //여기에 추가
+@ComponentScan({"com.cafe24.mysite.controller","com.cafe24.mysite.exception"}) //이건 자동 설정
+@Import({MVCConfig.class,MessageConfig.class,SwaggerConfig.class}) //여기에 추가
 public class WebConfig {
 	
 	@Bean 

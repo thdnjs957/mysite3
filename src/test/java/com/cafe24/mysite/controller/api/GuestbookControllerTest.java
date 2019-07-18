@@ -40,7 +40,6 @@ public class GuestbookControllerTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 	
-	
 	@Before
 	public void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -79,7 +78,6 @@ public class GuestbookControllerTest {
 		vo.setName("user1");
 		vo.setPassword("1234");
 		vo.setContents("test1");
-		
 		ResultActions resultActions = 
 			mockMvc
 			.perform(post("/api/guestbook/add").contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(vo)));
@@ -102,7 +100,7 @@ public class GuestbookControllerTest {
 			mockMvc
 			.perform(delete("/api/guestbook/delete").contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(map)));
 
-		//delete 요청에 대한 응답이 왔을때 클라이언트 단에서 또 삭제를 해줘야하니깐 No 값을 받아야 함 
+		//delete 요청에 대한 응답이 왔을때 클라이언트 단에서 또 삭제를 해줘야하니깐 No 값을 받아서 확인
 		resultActions.andExpect(status().isOk())
 		.andDo(print())
 		.andExpect(jsonPath("$.result", is("success")));
@@ -110,4 +108,3 @@ public class GuestbookControllerTest {
 	}
 	
 }
-

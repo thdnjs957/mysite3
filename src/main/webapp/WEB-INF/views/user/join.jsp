@@ -101,7 +101,7 @@
 					<fieldset>
 						<legend>성별</legend>
 						<label>여</label>
-						<form:radiobutton path="gender" value="femal" checked="checked" />
+						<form:radiobutton path="gender" value="female" checked="checked" />
 						<label>남</label>
 						<form:radiobutton path="gender" value="male" />
 					</fieldset>

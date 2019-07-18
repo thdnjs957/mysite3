@@ -12,34 +12,42 @@ import com.cafe24.mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookDao {
-	
+
+
 	@Autowired
 	private SqlSession sqlSession;
-	
-	
+
 	public List<GuestbookVo> getList() {
 
-		//List<GuestbookVo> result = new ArrayList<GuestbookVo>();
+		// List<GuestbookVo> result = new ArrayList<GuestbookVo>();
 
 		List<GuestbookVo> result = sqlSession.selectList("guestbook.getList");
 		return result;
 	}
 
+	public List<GuestbookVo> getList(Long lastNo) {
+		
+		List<GuestbookVo> result = sqlSession.selectList("guestbook.getList2", lastNo);
+		
+		return result;
+	}
+
 	public boolean insert(GuestbookVo vo) {
 
-		int count = sqlSession.insert("guestbook.insert",vo);
-		
+		int count = sqlSession.insert("guestbook.insert", vo);
+
 		return 1 == count;
 
 	}
-	
+
 	public boolean delete(GuestbookVo vo) {
 
-		int count = sqlSession.delete("guestbook.delete",vo);
-		
+		int count = sqlSession.delete("guestbook.delete", vo);
+
 		return 1 == count;
 
 	}
+
 	
 
 }

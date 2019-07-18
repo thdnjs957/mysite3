@@ -5,7 +5,7 @@
 
 	<insert id="insert" parameterType="uservo">
 		<![CDATA[
-			insert into user(no,name,email,password,gender,join_date) values(null,#{name},#{email},#{password},#{gender},now())		
+			insert into user(no,name,email,password,gender,role,join_date) values(null,#{name},#{email},#{password},#{gender},#{role},now())		
 		]]>
 		<selectKey keyProperty="no" resultType="long" order="AFTER">
 			select last_insert_id()
@@ -21,7 +21,7 @@
 	
 	<select id="getByEmail" parameterType="string" resultType="uservo"> 
 		<![CDATA[
-			select name,email,password,gender,join_date from user where email = #{email}
+			select no,name,email,password,role from user where email = #{email}
 		]]>
 	</select>
 	

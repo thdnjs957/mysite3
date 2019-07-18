@@ -35,12 +35,11 @@ public class UserDao {
 	}
 	
 	public UserVo get(String email) {
-		
+
 		UserVo result = sqlSession.selectOne("user.getByEmail",email);
-		
 		return result;
+		
 	}
-	
 	
 	public UserVo get(Long no) {
 		

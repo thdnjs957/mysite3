@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cafe24.mysite.dto.JSONResult;
+import com.cafe24.mysite.service.GuestbookService;
 import com.cafe24.mysite.service.GuestbookService2;
 import com.cafe24.mysite.vo.GuestbookVo;
 
@@ -19,28 +20,30 @@ import com.cafe24.mysite.vo.GuestbookVo;
 public class GuestbookController {
 
 	@Autowired
-	private GuestbookService2 guestbookService2;
+	private GuestbookService guestbookService;
 
-	@RequestMapping(value="/list/{no}", method=RequestMethod.GET)
-	public JSONResult list(@PathVariable(value="no") int no) {
+	
+	@RequestMapping(value="/list/{lastNo}", method=RequestMethod.GET)
+	public JSONResult list(@PathVariable(value="lastNo") Long lastNo) {
 		
-		List<GuestbookVo> list = guestbookService2.getContentsList(1L);
-		
+		List<GuestbookVo> list = guestbookService.getContentList(lastNo);
 		return JSONResult.success(list);
 		
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public JSONResult add(@RequestBody GuestbookVo guestbookVo) { //body에 json으로 오는거 받아내기
+	public JSONResult add(@RequestBody GuestbookVo guestbookVo) {
 		
-		GuestbookVo newVo = guestbookService2.addContents(guestbookVo);
-		return JSONResult.success(newVo);
+		guestbookService.writeContent(guestbookVo);
+		
+		return JSONResult.success(guestbookVo);
 
 	}
 	
 	@RequestMapping(value="/delete", method=RequestMethod.DELETE)
-	public JSONResult add(@RequestBody Map<String, Object> map) {
-		Long no = guestbookService2.deleteContents(((Integer)map.get("no")).longValue(),(String)map.get("password")); //지워진 놈의 번호
-		return JSONResult.success(no);
+	public JSONResult delete(@RequestBody GuestbookVo vo) {
+		boolean result = guestbookService.delete(vo);
+		return JSONResult.success(result ? vo.getNo() : -1);
 	}
+	
 }

@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@page import="com.cafe24.mysite.vo.GuestbookVo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%pageContext.setAttribute("newLine","\n");%>
@@ -14,10 +15,11 @@
 <body>
 	<div id="container">
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
-
+		
 		<div id="content">
 			<div id="guestbook">
-				<form action="${pageContext.servletContext.contextPath }/guestbook/list" method="post">
+				<form action="${pageContext.servletContext.contextPath }/guestbook/add" method="post">
+					<sec:csrfInput />
 					<table>
 						<tr>
 							<td>이름</td><td><input type="text" name="name"></td>

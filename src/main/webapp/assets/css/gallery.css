@@ -1,0 +1,87 @@
+@CHARSET "UTF-8";
+@import "mysite.css";
+
+#gallery			{ margin:20px auto;	width:540px;}
+#gallery ul			{ width: 100%;}
+
+#gallery div #galleryimg{
+	width:45px;
+	height:45px;
+	float:left;
+}
+
+#gallery h1	{
+	color: #111438;
+	margin-top:10px;
+	margin-bottom:20px;
+	background-size: 35px;
+	padding-left:10px;
+	float:left;
+	font-family:'Do Hyeon', sans-serif;
+}
+
+#gallery #upload-image{
+	background-color: #56628F;
+  	color: white;
+ 	padding: 14px 25px;
+ 	text-align: center;
+ 	text-decoration: none;
+ 	display: inline-block;
+	float:right;
+	border-radius:7px;
+	font-weight: bold;
+}
+
+#gallery #gallery_wrap{
+	height:70px;
+}
+
+#gallery ul{
+	width:540px;
+}
+
+#gallery ul li{
+	position: relative;
+    width: 23%;
+    float: left;
+    margin: 5px 5px;
+}
+
+#gallery ul li a.image{
+	display:block;
+    width: 123px;
+	height:123px;
+	background-size:100%;
+	line-height:130px;
+	vertical-align:center;
+	border: 3px solid #5E6C99;
+	background-color:#000;
+	background-repeat:no-repeat;
+}
+
+#gallery ul li a.del-button{
+	position:absolute;
+	top:3px;
+	left:103px;
+	width:40px;
+	height:40px;
+	background:url('/mysite3/assets/images/close.png') 0 0 no-repeat;
+	font-size:0px;
+	display:none;
+	
+}
+
+#gallery ul li:hover a.del-button{
+	display:block;
+}
+
+
+/* 이미지 업로드 팝업 레이어 */ 
+#dialog-upload-form 					{ text-align: left; }
+#dialog-upload-form p					{ padding:20px 0 5px 0; font-weight: bold; font-size:1.1em }
+#dialog-upload-form label, 
+#dialog-upload-form input				{ display:block; }
+#dialog-upload-form label				{ font-weight:bold; margin-top:10px; }
+#dialog-upload-form input				{ outline:none; margin-top:5px; }
+#dialog-upload-form input[type='text']	{ padding: 5px; border:2px solid #A9A9A9; width:260px; }
+

@@ -2,7 +2,6 @@ package com.cafe24.mysite.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.cafe24.mysite.security.AuthUser;
+import com.cafe24.mysite.security.SecurityUser;
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVo;
-import com.cafe24.security.Auth;
-import com.cafe24.security.AuthUser;
 
 @Controller
 @RequestMapping("/user")//이건 요청 url
@@ -60,19 +59,21 @@ public class UserController {
 		return "user/login";
 	} 
 	
-	@Auth
 	@RequestMapping( value="/update", method=RequestMethod.GET )
 	public String update(
-		@AuthUser UserVo authUser,
+		@AuthUser SecurityUser securityUser,
 		Model model ){
-		UserVo userVo = userService.getUser( authUser.getNo() );
+		UserVo userVo = userService.getUser( securityUser.getNo() );
 		model.addAttribute( "userVo", userVo );
 		return "user/update";
 	}
 	
+	
 	@RequestMapping( value="/update", method=RequestMethod.POST )
-	public String update( HttpSession session, @ModelAttribute UserVo userVo ){
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+	public String update( @AuthUser SecurityUser securityUser, @ModelAttribute UserVo userVo ){
+		
+		UserVo authUser = userService.getUser(securityUser.getNo());
+		
 		if(authUser == null) {
 			return "redirect:/";
 		}
@@ -94,15 +95,15 @@ public class UserController {
 	} 
 	
 	
-	@RequestMapping(value = "/auth", method = RequestMethod.POST)
-	public void auth() {
+//	@RequestMapping(value = "/auth", method = RequestMethod.POST)
+//	public void auth() {
+//
+//	}
 
-	}
-
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public void logout() {
-
-	}
+//	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+//	public void logout() {
+//
+//	}
 	
 //interceptor로 구현
 //	@RequestMapping("/logout") 
